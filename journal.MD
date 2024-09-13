@@ -14,8 +14,9 @@ Le code de bas-niveau est sujet à une multitude de bogues et qui ne peuvent êt
 Le compilateur Rust empêche la compilation de code contenant des bugs subtils et complexes, y compris des bogues de concurrence, ce qui améliore la productivité d'une équipe de développeurs en réduisant les erreurs et en sécurisant le code dès la phase de développement.
 Il est une solution pour les personnes qui recherchent de la rapidité et de la stabilité 
 
-
+## I - Prise en main
 ### 1.1 - Installation de Rust 
+Il est assez facile à installer rust et à gerer les différent version de Rust:
 #### 1. Installez Rust sur Linux ou macOS :
 ```bash
 $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
@@ -47,8 +48,8 @@ Pour desinstaller Rust
 $ rustup self uninstall
 ```
 ### 1.2 - Écrire et exécuter un programme Rust
-Un script sur Rust s'écrit de cette manière là
-```bash
+Un script sur Rust s'écrit comme en C de là manière suivante 
+```rust
 fn main() {
     println!("Hello, world!");
 }
@@ -62,9 +63,122 @@ Le programme devrait nous retourner :
 ```bash
 Hello, world!
 ```
-La fonction ```main``` est le point d'entrée de tous les programmes en Rust. Elle est définie sans paramètres et sans valeur de retour, avec son corps délimité par des accolades {}. 
+La fonction `main` est le point d'entrée de tous les programmes en Rust. Elle est définie sans paramètres et sans valeur de retour, avec son corps délimité par des accolades {}. 
 À l'intérieur de la fonction main, nous avons le code suivant 
-```println!("Hello, world!");```.
+`println!("Hello, world!");`.<br>
+Il écrit le texte à l'écran. Il y a quatre détails importants à noter ici:
+ - l'identation 4 espaces.
+ - println! est une macro propre à Rust.
+ - "Hello, world!" est une chaîne que nous envoyons en argument à println!.
+ - le point-virgule (;) indique que cette expression est terminée. 
+
+La compilation et l'éxécution sont des étapes séparées en Rust comme en C.
+
+### 1.3 - Cargo
+Cargo est le système de compilation et de gestion de paquets de Rust.<br>
+Il va nous permettre de gerer le projet en cours.<br>
+
+
+Pour créer un projet en cargo voici les étapes à suivre
+```rust
+$ cargo new hello_cargo
+$ cd hello_cargo
+```
+Cette commande permet de créer un nouveau projet.<br>
+Pour compiler ce projet : 
+```rust
+$ cargo build
+   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.85 secs
+```
+Une fois le projet compiler il ne reste plus qu'a l'éxécuter:
+```rust
+$ cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/hello_cargo`
+Hello, world!
+```
+Cargo fournit aussi une commande appelée `cargo check`. Elle vérifie rapidement votre code pour s'assurer qu'il est compilable, mais ne produit pas d'exécutable
+
+Cargo simplifie le processus de création, de compilation, et d'exécution des programmes, tout en gérant automatiquement les dépendances externes, il aide à structurer les projets en organisant les fichiers source et les configurations, tout en offrant des commandes pratiques comme cargo build (compilation), cargo run (exécution) et cargo check (vérification rapide sans exécutable).
+
+## II - Programmer le jeu du plus ou du moins
+Il nous faut d'abord créer le projet (voir le chapitre 1.3 Cargo)<br>
+La première partie du programme consiste à demander au joueur de saisir du texte, à traiter cette saisie, et à vérifier que la saisie correspond au format attendu en voici un exemple:
+```rust
+use std::io;
+
+fn main() {
+    println!("Devinez le nombre !");
+
+    println!("Veuillez entrer un nombre.");
+
+    let mut supposition = String::new();
+
+    io::stdin()
+        .read_line(&mut supposition)
+        .expect("Échec de la lecture de l'entrée utilisateur");
+
+    println!("Votre nombre : {}", supposition);
+}
+```
+Pour obtenir la saisie utilisateur et ensuite l'afficher, nous avons besoin d'importer la bibliothèque d'entrée/sortie `io` <br>
+Comme mentionnée dans le chapitre précedent `main` est le point d'entrée du programme <br>
+Le mot clé `fn` déclare une nouvelle fonction, les parenthèses `()` indiquent que cette fonction n'accepte aucun paramètre, et l'accolade ouvrante `{` marque le début du corps de la fonction.<br>
+Ensuite, on crée une variable pour stocker la saisie de l'utilisateur, comme ceci :
+```rust
+let mut supposition = String::new();
+```
+Ici nous pouvons noté que le mot clé `mut` est important car en Rust les variables sont immuable losqu'elles sont déclarées , il nous faut donc les rendre mutable en ajoutant le mot clé `mut`lors d'une déclaration de variables permet de modifier la valeur contenue dans celle-ci.<br>
+
+la fonction `stdin` du module `io` permet de traiter la valeur saisie par l'utilisateur <br>
+la méthode `read_line` sur l'entrée standard afin de récuperer la valeur saisie par utilisateur et de l'affecté à la variable `supposition`, on utilise la référence de la variable (`&`) , la référence permet de laisser plusieurs morceaux de votre code accéder à une même donnée sans avoir besoin de copier ces données dans la mémoire plusieurs fois.
+On gére les erreurs à l'aide de la ligne 
+```rust
+.expect("Échec de la lecture de l'entrée utilisateur");
+```
+
+
+Pour générer un nombre aléatoire dans le jeu du plus ou du moins, nous utilisons la crate externe `rand`. D'abord, nous ajoutons cette dépendance dans le fichier `Cargo.toml` :
+
+```toml
+[dependencies]
+rand = "0.8.3"
+```
+Ensuite, dans le code, on importe le trait `rand::Rng`, qui permet d'accéder aux méthodes de génération de nombres aléatoires :
+```rust
+use rand::Rng;
+```
+Le générateur de nombres est créé avec `rand::thread_rng()`, qui fournit un générateur spécifique au thread actuel. La méthode`gen_range(1..101)` est utilisée pour générer un nombre entre 1 et 100:
+```rust
+let nombre_secret = rand::thread_rng().gen_range(1..101);
+```
+Le résultat est ensuite stocké dans une variable, et ce nombre sera celui que l'utilisateur devra deviner.<br>
+
+
+Une fois que l'utilisateur a saisi un nombre, nous pouvons le comparer au nombre secret. Pour cela, nous utilisons la méthode `cmp` sur la supposition de l'utilisateur. Cette méthode compare deux valeurs et retourne une énumération `Ordering` avec trois variantes : `Less`, `Greater`, ou `Equal`.
+
+Nous commençons par importer `std::cmp::Ordering`
+
+```rust
+use std::cmp::Ordering;
+```
+Ensuite, nous utilisons une expression match pour comparer la supposition au nombre secret :
+```rust
+match supposition.cmp(&nombre_secret) {
+    Ordering::Less => println!("C'est plus !"),
+    Ordering::Greater => println!("C'est moins !"),
+    Ordering::Equal => {
+        println!("Vous avez gagné !");
+        break;
+    }
+}
+```
+Ajouter la ligne `break` après "Vous avez gagné !" fait sortir le programme quand le joueur a correctement deviné le nombre secret. Et quitter la boucle veut aussi dire terminer le programme, car ici la boucle est la dernière partie de main.
+
+
+
+
 
 ## Mes questions
 Comment Rust s'intègre t-il dans d'autre langage ?<br>
@@ -72,6 +186,8 @@ Comment est gérer la mémoire en Rust ?<br>
 Comment se differencie t-il des autres langages de programmation ?<br>
 Expliquez en quoi Rust permet au développeur de corriger efficacement les erreurs.<br>
 C'est quoi "un bogues de concurrence" ?<br>
+Quelle sont les commande nécessaire lorsque l'on créer un projet via cargo ?<br>
+Comment s'écrit un code en Rust et à quel langage ressemble t-il ?<br>
 
 
 ###### Jonny MATHANARUBAN
