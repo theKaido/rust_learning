@@ -193,6 +193,25 @@ Contrairement aux variables immuables, les constantes sont toujours immuables et
 
 Rust permet également de redéclarer une variable avec le même nom (technique appelée masquage), ce qui permet d’utiliser une nouvelle valeur ou de modifier le type de la variable. Cela diffère de la mutabilité car chaque réutilisation du mot-clé let crée une nouvelle variable, sans modifier l'ancienne.
 
+### B - Les types de données 
+En Rust, chaque valeur a un type spécifique qui permet au compilateur de savoir comment traiter les données. Rust est langage statiquement typé, ce qui signifie qu’il doit connaître les types des variables à la compilation. Cependant, le compilateur peut déduire les types dans de nombreux cas, à moins qu'une clarification soit nécessaire
+#### Type Scalaire
+Les types scalaires représentent des valeurs uniques et sont divisés en quatre catégories principales :
+
+- Entiers : Les entiers peuvent être signés (i) ou non signés (u), avec des tailles variant de 8 bits (i8, u8) à 128 bits (i128, u128). Le type entier par défaut en Rust est i32, suffisant pour la plupart des situations. Les entiers signés peuvent être négatifs, tandis que les non signés ne peuvent contenir que des valeurs positives.
+
+- Flottants : Utilisés pour les nombres à virgule. Rust supporte les types f32 et f64, avec f64 comme choix par défaut car il est plus précis et aussi rapide que f32 sur la plupart des processeurs modernes.
+
+- Booléens : Représentés par true ou false, ces valeurs booléennes sont principalement utilisées dans des structures conditionnelles comme if.
+
+- Caractères : Le type char représente des caractères Unicode sur 4 octets, ce qui permet de manipuler des lettres, symboles et même des emojis.
+
+#### Type Composés 
+Les types composés regroupent plusieurs valeurs dans une seule entité. Rust offre deux types principaux :
+
+- Tuples : Ils permettent de regrouper des valeurs de types différents dans un seul ensemble. Les tuples ont une taille fixe et ne peuvent pas être modifiés une fois déclarés. Chaque élément d'un tuple peut être accédé par son index ou déstructuré en variables distinctes.
+
+- Tableaux : Contrairement aux tuples, tous les éléments d'un tableau doivent être du même type. Les tableaux ont également une taille fixe, ce qui les rend adaptés pour les situations où le nombre d'éléments est constant, comme une liste de mois de l'année.
 
 ## Mes questions
 Comment Rust s'intègre t-il dans d'autre langage ?<br>
@@ -202,6 +221,11 @@ Expliquez en quoi Rust permet au développeur de corriger efficacement les erreu
 C'est quoi "un bogues de concurrence" ?<br>
 Quelle sont les commande nécessaire lorsque l'on créer un projet via cargo ?<br>
 Comment s'écrit un code en Rust et à quel langage ressemble t-il ?<br>
+En quoi la mutabilité permet t'il d'avoir un code sûr ?<br>
+Quel sont les principaux types en Rust ?<br>
+Quel sont les deux types de données présent en Rust ? <br>
+Quel est la différence entre un tableau et tuples en Rust ? <br>
+
 
 
 ###### Jonny MATHANARUBAN
