@@ -182,15 +182,11 @@ Les variables , les types les fonctions , les commentaires, les structures de co
 Rust possède un ensemble de mots-clé reservé à celui ci , nous ne pouvons pas les utilisé comme nom de variables ou de fonctions, ces mots-clés ont des signification spéciale, et nous servir à rediger différent programme en Rust. 
 ### A - Les variables et la mutabilité 
 En Rust, les variables sont immuables par défaut, ce qui garantit la sécurité et évite des bugs difficiles à traquer. Une fois qu'une variable est assignée, elle ne peut pas être modifiée, ce qui permet de garder un code plus sûr. Cependant, on peut rendre une variable mutable avec le mot-clé **mut** si on doit la modifier.
-
 Si vous avez besoin de modifier la valeur d'une variable, vous devez la déclarer avec mut, ce qui permet d'indiquer explicitement que la variable peut changer au cours du programme. Cela rend votre intention claire pour d'autres développeurs qui liront votre code.
 
-L'immuabilité est encouragée car elle rend le code plus fiable et évite les erreurs difficiles à détecter, comme les bogues de concurrence. Par exemple, si une partie du code repose sur une variable immuable, elle peut avoir des garanties que cette valeur ne changera pas, ce qui simplifie la logique du programme.
-
-La mutabilité peut être utile dans certains cas, notamment lorsqu'il est plus performant de modifier directement une structure de données existante plutôt que d'en créer une nouvelle. Cependant, il est souvent conseillé de choisir la clarté du code (en créant de nouvelles instances) plutôt que de rechercher la performance dans des cas où les données sont petites.
+L'immuabilité est encouragée car elle rend le code plus fiable et évite les erreurs difficiles à détecter, comme les bogues de concurrence. Par exemple, si une partie du code repose sur une variable immuable, elle peut avoir des garanties que cette valeur ne changera pas, ce qui simplifie la logique du programme. La mutabilité peut être utile dans certains cas, notamment lorsqu'il est plus performant de modifier directement une structure de données existante plutôt que d'en créer une nouvelle. Cependant, il est souvent conseillé de choisir la clarté du code (en créant de nouvelles instances) plutôt que de rechercher la performance dans des cas où les données sont petites.
 
 Contrairement aux variables immuables, les constantes sont toujours immuables et doivent être déclarées avec **const** et un type explicite. Elles sont souvent utilisées pour des valeurs qui ne changent pas et qui sont partagées entre plusieurs parties d'un programme. Elles doivent être initialisées avec des expressions calculables à la compilation.
-
 Rust permet également de redéclarer une variable avec le même nom (technique appelée masquage), ce qui permet d’utiliser une nouvelle valeur ou de modifier le type de la variable. Cela diffère de la mutabilité car chaque réutilisation du mot-clé let crée une nouvelle variable, sans modifier l'ancienne.
 
 ### B - Les types de données 
@@ -295,6 +291,35 @@ error: could not compile `functions` due to previous error
 
 ```
 Si un point-virgule est ajouté après x + 1, cela génère une erreur, car cela empêche l'expression de retourner une valeur.
+
+### D - Les Commentaires 
+Les commentaires permettent d'ajouter des explications à votre code, sans être pris en compte par le compilateur. Ils aident les développeurs à rendre leur code plus lisible et compréhensible pour d'autres.<br>
+- Les commentaires simples commencent par **//** et s'étendent jusqu'à la fin de la ligne.
+- Pour les commentaires plus longs, vous ajoutez **//** sur chaque ligne
+- Les commentaires peuvent aussi être ajoutés à la fin d'une ligne de code
+- Il peuvent être aussi placé au -dessu de la ligne de code à laquelle ils se rapporte
+
+```Rust
+fn main() {
+// hello, world
+}
+fn main() {
+// Donc ici on fait quelque chose de compliqué, tellement long que nous avons
+// besoin de plusieurs lignes de commentaires pour le faire ! Heureusement,
+// ce commentaire va expliquer ce qui se passe.
+}
+fn main() {
+    let nombre_chanceux = 7; // Je me sens chanceux aujourd'hui
+}
+fn main() {
+    // Je me sens chanceux aujourd'hui
+    let nombre_chanceux = 7;
+}
+ ```
+
+Enfin, Rust propose aussi des commentaires de documentation, qui seront abordés plus tard.
+
+
 
 ## Mes questions
 Comment Rust s'intègre t-il dans d'autre langage ?<br>
