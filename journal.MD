@@ -176,8 +176,22 @@ match supposition.cmp(&nombre_secret) {
 ```
 Ajouter la ligne `break` après "Vous avez gagné !" fait sortir le programme quand le joueur a correctement deviné le nombre secret. Et quitter la boucle veut aussi dire terminer le programme, car ici la boucle est la dernière partie de main.
 
+## III - Les concepts courants de programmation
+Nous allons voir ici les concepts courant présent dans presque tout les langages de programmation , et comment il fonctionne en Rust.
+Les variables , les types les fonctions , les commentaires, les structures de contrôle seront abordés dans ce chapitre.
+Rust possède un ensemble de mots-clé reservé à celui ci , nous ne pouvons pas les utilisé comme nom de variables ou de fonctions, ces mots-clés ont des signification spéciale, et nous servir à rediger différent programme en Rust. 
+### A - Les variables et la mutabilité 
+En Rust, les variables sont immuables par défaut, ce qui garantit la sécurité et évite des bugs difficiles à traquer. Une fois qu'une variable est assignée, elle ne peut pas être modifiée, ce qui permet de garder un code plus sûr. Cependant, on peut rendre une variable mutable avec le mot-clé **mut** si on doit la modifier.
 
+Si vous avez besoin de modifier la valeur d'une variable, vous devez la déclarer avec mut, ce qui permet d'indiquer explicitement que la variable peut changer au cours du programme. Cela rend votre intention claire pour d'autres développeurs qui liront votre code.
 
+L'immuabilité est encouragée car elle rend le code plus fiable et évite les erreurs difficiles à détecter, comme les bogues de concurrence. Par exemple, si une partie du code repose sur une variable immuable, elle peut avoir des garanties que cette valeur ne changera pas, ce qui simplifie la logique du programme.
+
+La mutabilité peut être utile dans certains cas, notamment lorsqu'il est plus performant de modifier directement une structure de données existante plutôt que d'en créer une nouvelle. Cependant, il est souvent conseillé de choisir la clarté du code (en créant de nouvelles instances) plutôt que de rechercher la performance dans des cas où les données sont petites.
+
+Contrairement aux variables immuables, les constantes sont toujours immuables et doivent être déclarées avec **const** et un type explicite. Elles sont souvent utilisées pour des valeurs qui ne changent pas et qui sont partagées entre plusieurs parties d'un programme. Elles doivent être initialisées avec des expressions calculables à la compilation.
+
+Rust permet également de redéclarer une variable avec le même nom (technique appelée masquage), ce qui permet d’utiliser une nouvelle valeur ou de modifier le type de la variable. Cela diffère de la mutabilité car chaque réutilisation du mot-clé let crée une nouvelle variable, sans modifier l'ancienne.
 
 
 ## Mes questions
