@@ -213,6 +213,89 @@ Les types composés regroupent plusieurs valeurs dans une seule entité. Rust of
 
 - Tableaux : Contrairement aux tuples, tous les éléments d'un tableau doivent être du même type. Les tableaux ont également une taille fixe, ce qui les rend adaptés pour les situations où le nombre d'éléments est constant, comme une liste de mois de l'année.
 
+### C - Les Fonctions
+En Rust, les fonctions sont déclarées avec le mot-clé **fn**, suivi d'un nom, d'une liste de paramètres (facultative) et d'un corps de fonction entre accolades. Le langage utilise la convention snake case pour nommer les fonctions et les variables, c'est-à-dire en minuscules avec des tirets bas pour séparer les mots.
+```Rust
+fn main() {
+    println!("Hello, world!");
+
+    une_autre_fonction();
+}
+fn une_autre_fonction() {
+    println!("Une autre fonction.");
+}
+```
+Les fonctions peuvent être définies n'importe où dans le code, avant ou après main, tant qu'elles sont définies quelque part. Le programme exécute les instructions dans l'ordre où elles apparaissent.
+
+#### Paramètres
+Les fonctions peuvent accepter des paramètres, et vous devez toujours spécifier leur type.
+```Rust
+fn main() {
+    afficher_mesure_avec_unite(5, 'h');
+}
+fn afficher_mesure_avec_unite(valeur: i32, unite: char) {
+    println!("La mesure est : {}{}", valeur, unite);
+}
+```
+Ici, la fonction prend deux paramètres (valeur et unite) et affiche les deux.
+
+#### Instructions et expressions
+En Rust, il est important de différencier instructions et expressions :
+
+- Les instructions exécutent des actions mais ne retournent pas de valeur.
+- Les expressions évaluent et retournent une valeur. 
+```Rust
+fn main() {
+    let y = {
+        let x = 3;
+        x + 1
+    };
+    println!("La valeur de y est : {}", y); // y vaut 4
+}
+```
+Ici, le bloc { let x = 3; x + 1 } est une expression qui retourne 4, affectée à y.
+
+#### Fonctions avec valeurs de retour
+Une fonction peut aussi retourner une valeur. Le type de retour est spécifié après une flèche **->**.<br>
+La dernière expression de la fonction est sa valeur de retour, à moins que vous n'utilisiez explicitement return.
+```Rust
+fn cinq() -> i32 {
+    5
+}
+fn main() {
+    let x = cinq();
+    println!("La valeur de x est : {}", x);
+}
+```
+Ici, la fonction cinq retourne 5, et son type de retour est i32. Une fonction retourne implicitement la dernière expression si elle n'est pas suivie d'un point-virgule. Ajouter un point-virgule à une expression la transforme en instruction, ce qui peut provoquer des erreurs si un type de retour est attendu.
+```Rust
+fn main() {
+    let x = plus_un(5);
+
+    println!("La valeur de x est : {}", x);
+}
+fn plus_un(x: i32) -> i32 {
+    x + 1;
+}
+
+$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+error[E0308]: mismatched types
+ --> src/main.rs:7:24
+  |
+7 | fn plus_un(x: i32) -> i32 {
+  |    -------            ^^^ expected `i32`, found `()`
+  |    |
+  |    implicitly returns `()` as its body has no tail or `return` expression
+8 |     x + 1;
+  |          - help: consider removing this semicolon
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `functions` due to previous error
+
+```
+Si un point-virgule est ajouté après x + 1, cela génère une erreur, car cela empêche l'expression de retourner une valeur.
+
 ## Mes questions
 Comment Rust s'intègre t-il dans d'autre langage ?<br>
 Comment est gérer la mémoire en Rust ?<br>
@@ -224,8 +307,8 @@ Comment s'écrit un code en Rust et à quel langage ressemble t-il ?<br>
 En quoi la mutabilité permet t'il d'avoir un code sûr ?<br>
 Quel sont les principaux types en Rust ?<br>
 Quel sont les deux types de données présent en Rust ? <br>
-Quel est la différence entre un tableau et tuples en Rust ? <br>
-
+Quelle est la différence entre un tableau et un tuple en Rust <br>
+Comment peuvent être retourné les valeurs ? <br>
 
 
 ###### Jonny MATHANARUBAN
