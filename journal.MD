@@ -319,7 +319,176 @@ fn main() {
 
 Enfin, Rust propose aussi des commentaires de documentation, qui seront abordés plus tard.
 
+### E - Les Structures de Contrôle
+En Rust, les structures de contrôle vous permettent de diriger l'exécution de votre programme en fonction de conditions ou de boucler sur des actions répétées. Les principales structures de contrôle sont les expressions **if** et les boucles.
 
+### Les expressions if
+L'expression **if** vous permet d'exécuter du code en fonction d'une condition booléenne.<br> Si la condition est vraie, le bloc de code associé est exécuté, sinon, un bloc alternatif (avec else) peut être exécuté.
+```Rust
+fn main() {
+    let nombre = 3;
+
+    if nombre < 5 {
+        println!("La condition est vérifiée");
+    } else {
+        println!("La condition n'est pas vérifiée");
+    }
+}
+```
+Dans cet exemple, si nombre est inférieur à 5, le premier bloc s'exécute, sinon c'est le second.
+
+***Important*** : Les conditions **if** doivent toujours être de type booléen, sinon Rust renvoie une erreur de compilation. Par exemple, si vous essayez de tester un entier directement comme condition, Rust lèvera une erreur
+
+#### Gérer plusieurs conditions avec else if
+
+Si vous devez gérer plusieurs conditions, vous pouvez utiliser **else if** pour enchaîner plusieurs vérifications :
+```Rust
+fn main() {
+    let nombre = 6;
+
+    if nombre % 4 == 0 {
+        println!("Le nombre est divisible par 4");
+    } else if nombre % 3 == 0 {
+        println!("Le nombre est divisible par 3");
+    } else if nombre % 2 == 0 {
+        println!("Le nombre est divisible par 2");
+    } else {
+        println!("Le nombre n'est pas divisible par 4, 3 ou 2");
+    }
+}
+```
+Le programme vérifie chaque condition dans l'ordre et exécute le premier bloc de code dont la condition est vraie.
+
+#### Utiliser if dans une instruction let 
+L'une des particularités de Rust est que if est une expression, ce qui signifie qu'il peut être utilisé pour affecter une variable directement.<br>
+ Par exemple, vous pouvez affecter une variable en fonction d'une condition 
+```Rust
+fn main() {
+    let condition = true;
+    let nombre = if condition { 5 } else { 6 };
+
+    println!("La valeur du nombre est : {}", nombre);
+}
+```
+Dans cet exemple, la variable nombre recevra la valeur 5 si condition est vraie, sinon elle recevra la valeur 6.<br> Notez que les instructions if et else doivent retourner des valeurs du même type, sinon une erreur sera générée.
+
+### Les répétitions avec les boucles
+Rust propose plusieurs types de boucles pour exécuter un bloc de code plusieurs fois : **loop**, **while** et **for**.<br>Ces boucles vous permettent d'exécuter du code plusieurs fois jusqu'à ce qu'une condition soit remplie ou que vous décidiez de les arrêter.
+#### Répéter du code avec loop
+La boucle **loop** exécute un bloc de code en continu, créant une boucle infinie jusqu'à ce qu'une condition de sortie soit explicitement définie avec **break**.
+```Rust
+fn main() {
+    loop {
+        println!("À nouveau !");
+    }
+    //Ce programme affiche "Encore !" indéfiniment,
+    //jusqu'à ce qu'il soit arrêté manuellement (par exemple, en appuyant sur ctrl-c).
+}
+$ cargo runCompiling loops v0.1.0 (file:///projects/loops)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.29s
+     Running `target/debug/loops`
+À nouveau !
+À nouveau !
+À nouveau !
+À nouveau !
+^CÀ nouveau !
+```
+Pour quitter une boucle, vous pouvez utiliser **break**.
+
+Lorsque vous avez plusieurs boucles imbriquées, **break** et **continue** s'appliquent à la boucle la plus proche.<br> Vous pouvez aussi utiliser des étiquettes pour indiquer à quelle boucle le **break** ou **continue** s'appliquent.
+```Rust
+fn main() {
+    let mut compteur = 0;
+    'increment: loop {
+        println!("compteur = {}", compteur);
+        let mut restant = 10;
+
+        loop {
+            println!("restant = {}", restant);
+            if restant == 9 {
+                break;
+            }
+            if compteur == 2 {
+                break 'increment;
+            }
+            restant -= 1;
+        }
+
+        compteur += 1;
+    }
+    println!("Fin du compteur = {}", compteur);
+}
+```
+La boucle la plus à l'extérieur a l'étiquette increment, et elle va incrémenter de 0 à 2. <br>La boucle à l'intérieur n'a pas d'étiquette et va décrementer de 10 à 9. Le premier break qui ne précise pas d'étiquette va arrêter uniquement la boucle interne. L'instruction break 'increment; va arrêter la boucle la plus à l'extérieur.
+
+### Retourner des valeurs d'une boucle
+L'une des utilisations intéressantes d'une boucle **loop** est de réessayer une opération qui pourrait échouer ou qui dépend d'une condition externe pour se terminer.
+Rust permet de retourner une valeur depuis une boucle loop. Vous pouvez le faire en plaçant l'expression que vous souhaitez renvoyer après le mot-clé break. Cette valeur sera alors accessible en dehors de la boucle et pourra être utilisée dans votre code
+```Rust
+fn main() {
+    let mut compteur = 0;
+    let resultat = loop {
+        compteur += 1;
+
+        if compteur == 10 {
+            break compteur * 2;
+        }
+    };
+    println!("Le résultat est {}", resultat);
+}
+```
+
+### Les boucles conditionnelles avec while
+Les boucles while sont couramment utilisées lorsqu'un programme doit répéter l'exécution d'un bloc de code tant qu'une condition reste vraie.<br> Lorsque la condition devient fausse, la boucle se termine, et le programme continue avec le reste du code.<br>
+La structure d'une boucle while est très simple : tant que la condition spécifiée est vraie, le bloc de code associé est exécuté.<br> Dès que la condition est évaluée comme fausse, l'exécution sort de la boucle.
+```Rust
+fn main() {
+    let mut nombre = 3;
+    while nombre != 0 {
+        println!("{} !", nombre);
+
+        nombre -= 1;
+    }
+    println!("DÉCOLLAGE !!!");
+}
+```
+
+### Boucler dans une collection avec for
+Il est possible d'utiliser une boucle while pour parcourir les éléments d'une collection, comme un tableau. Cependant, cela peut être plus sujet à erreur.<br> Par exemple, si l'indice dépasse la taille du tableau, le programme peut paniquer.
+```Rust
+fn main() {
+    let a = [10, 20, 30, 40, 50];
+    let mut indice = 0;
+    while indice < 5 {
+        println!("La valeur est : {}", a[indice]);
+
+        indice += 1;
+    }
+}
+$ cargo run
+   Compiling loops v0.1.0 (file:///projects/loops)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.32s
+     Running `target/debug/loops`
+La valeur est : 10
+La valeur est : 20
+La valeur est : 30
+La valeur est : 40
+La valeur est : 50
+```
+
+Bien que ce code fonctionne, il est plus propice aux erreurs et plus lent à cause des vérifications constantes de l'indice.<br>
+
+Une alternative plus sûre et plus concise est d'utiliser la boucle for. Cette structure permet d'itérer automatiquement sur chaque élément de la collection sans se soucier des indices ou des dépassements.
+
+```Rust
+fn main() {
+    let a = [10, 20, 30, 40, 50];
+    for element in a {
+        println!("La valeur est : {}", element);
+    }
+}
+```
+En utilisant for, le programme devient plus lisible et sûr.<br> Il n'est plus nécessaire de suivre manuellement les indices, et la boucle s'adapte automatiquement à la taille de la collection, ce qui élimine les risques de dépassement.
 
 ## Mes questions
 Comment Rust s'intègre t-il dans d'autre langage ?<br>
@@ -334,6 +503,7 @@ Quel sont les principaux types en Rust ?<br>
 Quel sont les deux types de données présent en Rust ? <br>
 Quelle est la différence entre un tableau et un tuple en Rust <br>
 Comment peuvent être retourné les valeurs ? <br>
+Quel est la différence entre une boucle for et while ?<br>
 
 
 ###### Jonny MATHANARUBAN
